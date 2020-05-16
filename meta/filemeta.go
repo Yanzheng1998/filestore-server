@@ -1,5 +1,7 @@
 package meta
 
+import "sort"
+
 // FileMeta: file metadata struct
 type FileMeta struct {
 	FileSha1 string
@@ -22,4 +24,20 @@ func UpdateFileMeta(fmeta FileMeta) {
 
 func GetFileMeta(fileSha1 string) FileMeta {
 	return fileMetas[fileSha1]
+}
+
+// GetLastFileMetas : Get batch file Metas
+func GetLastFileMetas(count int) []FileMeta {
+	fMetaArray := make([]FileMeta, len(fileMetas))
+	for _, v := range fileMetas {
+		fMetaArray = append(fMetaArray, v)
+	}
+
+	sort.Sort(ByUploadTime(fMetaArray))
+	return fMetaArray[0:count]
+}
+
+// RemoveFileMeta : delete metadata
+func RemoveFileMeta(filesha1 string) {
+	delete(fileMetas, filesha1)
 }
