@@ -20,14 +20,14 @@
 <body>
   <form>
     <div style="width:500px;margin:10px auto;text-align: center;">
-      <div style="font-size:28px;font-weight:bold;margin:0px auto;">用户注册</div>
+      <div style="font-size:28px;font-weight:bold;margin:0px auto;">Sign Up</div>
       <br />
       <table style="width:100%;text-align: left;">
         <tbody>
           <tr style="margin-bottom: 20px;">
             <td>
               <span class="p">*</span>
-              <label for="username" class="l"> 新用户名:</label>
+              <label for="username" class="l"> Username:</label>
             </td>
             <td>
               <input id="username" type="text" style="height:30px;width:250px;padding-right:50px;">
@@ -40,7 +40,7 @@
           <tr style="margin-bottom: 20px;">
             <td>
               <span class="p">*</span>
-              <label for="password" class="l"> 密码:</label>
+              <label for="password" class="l"> Password:</label>
             </td>
             <td>
               <input id="password" type="text" style="height:30px;width:250px;padding-right:50px;">
@@ -53,7 +53,7 @@
           <tr style="margin-bottom: 20px;">
             <td>
               <span class="p">*</span>
-              <label for="passwordc" class="l"> 确认密码:</label>
+              <label for="passwordc" class="l"> Confirm Password:</label>
             </td>
             <td>
               <input id="passwordc" type="text" style="height:30px;width:250px;padding-right:50px;">
@@ -67,8 +67,8 @@
             <td>
             </td>
             <td>
-              <input class="btn btn-success" type="button" style="margin:0 auto;width:250px;" value="点击注册" onclick='onSignup()' />
-              <label name='login_hint' id='login_hint' style='display:none'>注册成功，２秒后跳转到登录页面...</label>
+              <input class="btn btn-success" type="button" style="margin:0 auto;width:250px;" value="sign up" onclick='onSignup()' />
+              <label name='login_hint' id='login_hint' style='display:none'>Succeeded，jump to sign in page in 2 seconds...</label>
             </td>
           </tr>
         </tbody>
@@ -104,7 +104,7 @@
           }, 2000);
 
         } else {
-          alert('注册失败');
+          alert('Failed to sign up');
         }
       }
     });
