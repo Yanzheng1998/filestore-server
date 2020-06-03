@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	dblayer "filestore-server/db"
 	"filestore-server/meta"
 	"filestore-server/util"
 	"fmt"
@@ -85,8 +86,14 @@ func GetFileMetaHandler(w http.ResponseWriter, r *http.Request) {
 func FileQueryHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	limitCnt, _ := strconv.Atoi(r.Form.Get("limit"))
-	fileMetas := meta.GetLastFileMetas(limitCnt)
-	data, err := json.Marshal(fileMetas)
+	username := r.Form.Get("username")
+	//fileMetas := meta.GetLastFileMetas(limitCnt)
+	userFiles, err := dblayer.QueryUserFileMetas(username, limitCnt)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	data, err := json.Marshal(userFiles)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return

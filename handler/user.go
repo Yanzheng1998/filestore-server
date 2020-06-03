@@ -59,7 +59,7 @@ func SignInHandler(w http.ResponseWriter, r *http.Request) {
 
 	encPassword := util.Sha1([]byte(password + pwd_salt))
 
-	pwdChecked := dblayer.UserSignUp(username, encPassword)
+	pwdChecked := dblayer.UserSignin(username, encPassword)
 
 	if !pwdChecked {
 		w.Write([]byte("FAILED"))
@@ -75,7 +75,49 @@ func SignInHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// redirection
-	w.Write([]byte("http://" + r.Host + "/static/view/home.html"))
+	resp := util.RespMsg{
+		Code: 0,
+		Msg: "Ok",
+		Data: struct{
+			Location string
+			Username string
+			Token string
+		} {
+			Location: "http://" + r.Host + "/static/view/home.html",
+			Username: username,
+			Token: token,
+		},
+	}
+
+	w.Write(resp.JSONBytes())
+}
+
+func UserInfoHandler(w http.ResponseWriter, r *http.Request) {
+	// 1. Parse request
+	r.ParseForm()
+	username := r.Form.Get("username")
+	//token := r.Form.Get("token")
+
+	// 2. check if token is valid
+	//isTokenValid := IsTokenValid(token)
+	//if !isTokenValid {
+	//	w.WriteHeader(http.StatusForbidden)
+	//	return
+	//}
+	// 3. query user info
+	user, err := dblayer.GetUserInfo(username)
+	if err != nil {
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
+
+	// 4. Reponse body
+	resp := util.RespMsg{
+		Code: 0,
+		Msg: "OK",
+		Data: user,
+	}
+	w.Write(resp.JSONBytes())
 }
 
 func GenToken(username string) string {
@@ -83,4 +125,11 @@ func GenToken(username string) string {
 	timestamp := fmt.Sprint("%x", time.Now().Unix())
 	tokenPrefix := util.MD5([]byte(username + timestamp + "_tokensalt"))
 	return tokenPrefix + timestamp[:8]
+}
+
+func IsTokenValid(token string) bool {
+	if len(token) != 40 {
+		return false
+	}
+	return true
 }
